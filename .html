@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homepage</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%230B0E1A'/%3E%3Ccircle cx='20' cy='13' r='9' fill='%23E8A24B'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+  :root{
+    --font-display: 'Fraunces', ui-serif, Georgia, serif;
+    --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+    --text-primary: #E9E7F0;
+    --text-muted: #D2D1D7;
+    --accent: #F3F2F6;
+    --accent-soft: rgba(255, 255, 255, 0.38);
+    --ember: #E8A24B;
+    --ember-soft: rgba(232, 162, 75, 0.32);
+    --glass-bg: rgba(255, 255, 255, 0.10);
+    --glass-bg-hover: rgba(255, 255, 255, 0.16);
+    --glass-border: rgba(255, 255, 255, 0.18);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    height: 100%;
+    margin: 0;
+  }
+
+  html, body{
+    background: transparent !important;
+  }
+  body{
+    font-family: var(--font-body);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .side-shade{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(to left, rgba(4,5,10,0.55) 0%, rgba(4,5,10,0.22) 30%, rgba(4,5,10,0) 62%);
+  }
+
+  .scrim{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 60% 55% at 50% 45%, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 70%);
+  }
+
+
+  .stage{
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 8vh 24px 6vh;
+    gap: 2px;
+  }
+
+  .fade{
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.7s ease-out forwards;
+  }
+  @keyframes fadeUp{
+    to{ opacity: 1; transform: translateY(0); }
+  }
+
+  .eyebrow{
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin: 0 0 6px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    animation-delay: 0.05s;
+  }
+
+  .clock{
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: clamp(64px, 12vw, 148px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.55), 0 0 60px var(--ember-soft);
+    animation-delay: 0.18s;
+  }
+  .clock:hover{ color: #fff; }
+  .clock .meridiem{
+    font-family: var(--font-body);
+    font-size: 0.26em;
+    font-weight: 500;
+    vertical-align: super;
+    margin-left: 10px;
+    color: var(--text-muted);
+  }
+
+  .date{
+    font-size: 15px;
+    color: var(--text-muted);
+    margin: 10px 0 0;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+    animation-delay: 0.3s;
+  }
+
+  /* ---------- search ---------- */
+  .search{
+    margin-top: 44px;
+    width: min(560px, 90vw);
+    animation-delay: 0.42s;
+  }
+  .search-box{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    border-radius: 999px;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(32px) saturate(1.4);
+    -webkit-backdrop-filter: blur(32px) saturate(1.4);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .search-box:focus-within{
+    border-color: var(--accent-soft);
+    box-shadow: 0 0 0 4px var(--accent-soft), 0 10px 30px rgba(0,0,0,0.35);
+  }
+  .search-box svg{ flex: none; opacity: 0.6; }
+  .search-box input{
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    font-family: var(--font-body);
+    font-size: 16px;
+    color: var(--text-primary);
+  }
+  .search-box input::placeholder{ color: var(--text-muted); }
+
+  .engines{
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .engine{
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: var(--text-muted);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 4px 12px;
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .engine:hover{ color: var(--text-primary); }
+  .engine.active{
+    color: var(--accent);
+    border-color: var(--accent-soft);
+  }
+
+  .links{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:16px;
+    margin-top:40px;
+  }
+
+  .link-tile{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:80px;
+    height:80px;
+    text-decoration:none;
+    color:white;
+    background:var(--glass-bg);
+    border:1px solid var(--glass-border);
+    border-radius:18px;
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    transition:.2s;
+  }
+  .link-tile:hover, .link-tile:focus-visible{
+    transform: translateY(-3px);
+    background: var(--glass-bg-hover);
+    border-color: var(--accent-soft);
+    box-shadow: 0 12px 26px rgba(0,0,0,0.35);
+  }
+  .link-tile img{
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    background: rgba(255,255,255,0.08);
+  }
+  .link-tile span{
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  a, button{ font: inherit; }
+  :focus-visible{ outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  </style>
+</head>
+<body>
+
+  <div class="side-shade" aria-hidden="true"></div>
+  <div class="scrim" aria-hidden="true"></div>
+
+  <main class="stage">
+    <p class="eyebrow fade" id="greeting">Good evening</p>
+
+    <button class="clock fade" id="clock" aria-label="Time — click to toggle 12/24 hour format">9:41<span class="meridiem">PM</span></button>
+    <p class="date fade" id="dateLine">Sunday, July 26</p>
+
+    <form class="search fade" id="searchForm" autocomplete="off">
+      <div class="search-box">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search the web, or jump to a site" spellcheck="false" autofocus>
+      </div>
+      <div class="engines" id="engineToggle">
+        <button type="button" class="engine" data-engine="brave">Brave</button>
+        <button type="button" class="engine" data-engine="google">Google</button>
+        <button type="button" class="engine" data-engine="duckduckgo">DuckDuckGo</button>
+      </div>
+    </form>
+
+    <nav class="links fade" id="linksGrid" aria-label="Quick links"></nav>
+  </main>
+
+<script>
+  // Default search engine: "brave" | "google" | "duckduckgo"
+  const DEFAULT_ENGINE = "brave";
+
+  const ENGINES = {
+    brave:      "https://search.brave.com/search?q=",
+    google:     "https://www.google.com/search?q=",
+    duckduckgo: "https://duckduckgo.com/?q=",
+  };
+
+  // ---------- clock + greeting ----------
+  const clockEl = document.getElementById("clock");
+  const greetingEl = document.getElementById("greeting");
+  const dateEl = document.getElementById("dateLine");
+
+  let use24h = localStorage.getItem("nt-format") === "24";
+
+  function greetingFor(hour){
+    if (hour < 5) return "Still up?";
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    if (hour < 21) return "Good evening";
+    return "Good night";
+  }
+
+  function updateClock(){
+    const now = new Date();
+    let h = now.getHours();
+    const m = String(now.getMinutes()).padStart(2, "0");
+    let meridiem = "";
+
+    if (use24h){
+      h = String(h).padStart(2, "0");
+    } else {
+      meridiem = h >= 12 ? "PM" : "AM";
+      h = h % 12 || 12;
+    }
+
+    clockEl.innerHTML = `${h}:${m}${meridiem ? `<span class="meridiem">${meridiem}</span>` : ""}`;
+  }
+
+  function updateGreetingAndDate(){
+    const now = new Date();
+    greetingEl.textContent = greetingFor(now.getHours());
+    dateEl.textContent = now.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+  }
+
+  clockEl.addEventListener("click", () => {
+    use24h = !use24h;
+    localStorage.setItem("nt-format", use24h ? "24" : "12");
+    updateClock();
+  });
+
+  updateClock();
+  updateGreetingAndDate();
+  setInterval(updateClock, 1000);
+  setInterval(updateGreetingAndDate, 60 * 1000);
+
+  // ---------- search ----------
+  const searchForm = document.getElementById("searchForm");
+  const searchInput = document.getElementById("searchInput");
+  const engineButtons = document.querySelectorAll(".engine");
+
+  let engine = localStorage.getItem("nt-engine") || DEFAULT_ENGINE;
+
+  function paintEngineButtons(){
+    engineButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.engine === engine));
+  }
+  paintEngineButtons();
+
+  engineButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      engine = btn.dataset.engine;
+      localStorage.setItem("nt-engine", engine);
+      paintEngineButtons();
+      searchInput.focus();
+    });
+  });
+
+  searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = searchInput.value.trim();
+    if (!q) return;
+
+    const looksLikeUrl = /^https?:\/\//i.test(q) || (/^[\w-]+(\.[a-z]{2,})+([\/?#].*)?$/i.test(q) && !q.includes(" "));
+
+    if (looksLikeUrl){
+      window.location.href = /^https?:\/\//i.test(q) ? q : `https://${q}`;
+    } else {
+      window.location.href = ENGINES[engine] + encodeURIComponent(q);
+    }
+  });
+
+  // quick keyboard shortcut: press "/" from anywhere to jump to search
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "/" && document.activeElement !== searchInput){
+      e.preventDefault();
+      searchInput.focus();
+    }
+  });
+
+  // ---------- quick links (matches screenshot: GitHub, YouTube, Gmail, Reddit, Gemini, Claude) ----------
+  const LINKS = [
+    {
+      name: "GitHub",
+      url: "https://github.com",
+      icon: "https://www.google.com/s2/favicons?domain=github.com&sz=64"
+    },
+    {
+      name: "YouTube",
+      url: "https://youtube.com",
+      icon: "https://www.google.com/s2/favicons?domain=youtube.com&sz=64"
+    },
+    {
+      name: "Gmail",
+      url: "https://mail.google.com",
+      icon: "https://www.google.com/s2/favicons?domain=mail.google.com&sz=64"
+    },
+    {
+      name: "Reddit",
+      url: "https://reddit.com",
+      icon: "https://www.google.com/s2/favicons?domain=reddit.com&sz=64"
+    },
+    {
+      name: "Gemini",
+      url: "https://gemini.google.com",
+      icon: "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=64"
+    },
+    {
+      name: "Claude",
+      url: "https://claude.ai",
+      icon: "https://www.google.com/s2/favicons?domain=claude.ai&sz=64"
+    }
+  ];
+
+  const grid = document.getElementById("linksGrid");
+
+  LINKS.forEach(link => {
+    const a = document.createElement("a");
+    a.className = "link-tile";
+    a.href = link.url;
+
+    a.innerHTML = `
+      <img src="${link.icon}" alt="">
+      <span>${link.name}</span>
+    `;
+
+    grid.appendChild(a);
+  });
+
+ </script>
+
+</body>
+</html>
